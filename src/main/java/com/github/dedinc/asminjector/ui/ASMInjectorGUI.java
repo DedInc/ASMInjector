@@ -24,7 +24,7 @@ public class ASMInjectorGUI extends JFrame {
         this.jarModifier = jarModifier;
         setTitle("ASMInjector - Jar Modifier");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600, 480);
+        setSize(800, 600);
         initUI();
         setLocationRelativeTo(null);
     }
@@ -100,12 +100,18 @@ public class ASMInjectorGUI extends JFrame {
         JarFile jarFile = jarModifier.getJarFile();
         if (jarFile != null) {
             Enumeration<JarEntry> entries = jarFile.entries();
+            String longestPath = "";
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
                 if (entry.getName().endsWith(".class")) {
-                    classComboBox.addItem(entry.getName().replaceAll("/", ".").replace(".class", ""));
+                    String className = entry.getName().replaceAll("/", ".").replace(".class", "");
+                    classComboBox.addItem(className);
+                    if (className.length() > longestPath.length()) {
+                        longestPath = className;
+                    }
                 }
             }
+            classComboBox.setPrototypeDisplayValue(longestPath + "XXXXXXXXXXXXXXXXXXXX");
         }
     }
 

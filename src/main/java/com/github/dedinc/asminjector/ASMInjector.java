@@ -9,7 +9,7 @@ public class ASMInjector {
     public static void main(String[] args) {
         if (SystemInfo.isMacOS) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("apple.awt.application.name", "MindVault");
+            System.setProperty("apple.awt.application.name", "ASMInjector");
             System.setProperty("apple.awt.application.appearance", "system");
         }
 
