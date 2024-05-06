@@ -3,6 +3,12 @@ plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile) {
