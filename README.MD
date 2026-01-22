@@ -1,73 +1,34 @@
-# ASMInjector 💉🔍
+# ASMInjector
 
-ASMInjector is a powerful Java application that allows you to inject code into existing JAR files using the ASM (
-Abstract Syntax Tree Manipulation) bytecode manipulation library. 🧰 It provides a user-friendly graphical interface to
-load a JAR file, select a class and method, and embed your custom code into the selected method. 🚀
+A Java Swing utility that wraps the ObjectWeb ASM library to inject bytecode hooks into existing JAR files. 
 
-## Features ✨
+It allows you to select a specific class and method within a target JAR and insert a static method call at the entry point of that method. This is useful for debugging, hot-patching, or quick instrumentation without decompiling.
 
-- 🗃️ Load and explore JAR files
-- 📂 Browse and select classes and methods within the JAR
-- 💻 Inject custom code into any method of your choice
-- ⚙ Option to run the injected code in a separate thread
-- 🔄 Generate a new JAR file with the embedded code
-- 🖥️ Cross-platform GUI built with Swing
+## How it works
 
-## Getting Started 🚀
+The tool parses the target JAR to build a class tree. Once a target method is selected, it uses `MethodVisitor` to inject an `INVOKESTATIC` instruction at the beginning of the method body.
 
-### Prerequisites
+**Note:** This tool only injects the *method call*. It does not inject the payload class itself. You must ensure the class containing your hook method is available on the application's classpath at runtime, otherwise the modified JAR will throw `NoClassDefFoundError`.
 
-- Java Development Kit (JDK) 8 or later
+## Usage
 
-### Building from Source
+1. Launch the application.
+2. **Load JAR**: Select the target application.
+3. **Select Target**: Navigate the tree to find the class and method you want to hook.
+4. **Payload Configuration**:
+   - **Injection Class**: Fully qualified name of your payload class (e.g., `com.example.MyHook`).
+   - **Method Name**: The static method to invoke (e.g., `onEntry`).
+5. **Run in Thread**: Wraps the injection call in a new Thread to avoid blocking the main execution flow of the target app.
+6. **Embed Code**: Outputs a new JAR (usually suffixed with `_modified.jar`).
 
-1. Clone the repository:
+## Build
+
+Requires JDK 8 or higher.
 
 ```bash
 git clone https://github.com/DedInc/ASMInjector.git
-```
-
-2. Navigate to the project directory:
-
-```bash
 cd ASMInjector
-```
-
-3. Build the project using Gradle:
-
-```bash
 ./gradlew shadowJar
 ```
 
-### Running the Application
-
-After building the project, you can run the ASMInjector application with the following command:
-
-```bash
-cd build/libs
-java -jar ASMInjector-1.0-all.jar
-```
-
-## Usage 🕹️
-
-1. Click the "Load JAR" button and select the JAR file you want to modify.
-2. Select the class and method you want to inject code into from the respective combo boxes.
-3. Enter the fully qualified name of your injection class and the name of the method to be injected.
-4. (Optional) Check the "Run in Thread" checkbox if you want the injected code to run in a separate thread.
-5. Click the "Embed Code" button to generate a new JAR file with the injected code.
-6. The path to the modified JAR file will be displayed in a message dialog.
-
-## Contributing 🤝
-
-Contributions are welcome! If you have any ideas, bug reports, or feature requests, please open an issue or submit a
-pull request.
-
-## License 📄
-
-This project is licensed under the [MIT License](LICENSE).
-
-## Acknowledgments 🙏
-
-- The ASM bytecode manipulation library
-- The developers of the Swing GUI toolkit
-- The open-source community for their invaluable contributions
+The artifact will be located in `build/libs/ASMInjector-1.0-all.jar`.
